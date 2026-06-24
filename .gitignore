@@ -1,0 +1,12 @@
+venv/
+__pycache__/
+*.pyc
+.env
+data/uploads/*
+data/chroma_db/*
+data/mlflow/*
+data/logs/*
+*.egg-info/
+.pytest_cache/
+dist/
+build/

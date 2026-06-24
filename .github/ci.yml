@@ -1,0 +1,125 @@
+# ─────────────────────────────────────────────────────────────────────
+# PRISM — GitHub Actions CI Pipeline
+#
+# Triggers on every push and pull request to main branch.
+#
+# Jobs:
+#   lint    : Code style checks (ruff)
+#   test    : Unit tests (pytest)
+#   build   : Docker image build verification
+# ─────────────────────────────────────────────────────────────────────
+
+name: PRISM CI
+
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+    branches: [main]
+
+env:
+  PYTHON_VERSION: "3.11"
+
+jobs:
+
+  # ── Job 1: Lint ────────────────────────────────────────────────────
+  lint:
+    name: Code Quality
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install linting tools
+        run: pip install ruff
+
+      - name: Run ruff linter
+        run: ruff check backend/ --select=E,F,W --ignore=E501
+        # E501 = line too long — ignored for readability in RAG prompts
+
+      - name: Check import ordering
+        run: ruff check backend/ --select=I
+
+  # ── Job 2: Test ────────────────────────────────────────────────────
+  test:
+    name: Unit Tests
+    runs-on: ubuntu-latest
+    needs: lint
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: pip
+
+      - name: Install dependencies
+        run: |
+          pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest pytest-asyncio pytest-cov
+
+      - name: Create .env for tests
+        run: |
+          cp .env.example .env
+          echo "ENVIRONMENT=development" >> .env
+          echo "LLM_PROVIDER=ollama" >> .env
+          echo "OPENAI_API_KEY=test-key" >> .env
+
+      - name: Create data directories
+        run: mkdir -p data/uploads data/chroma_db data/mlflow data/logs
+
+      - name: Run tests
+        run: |
+          pytest tests/ \
+            --cov=backend \
+            --cov-report=term-missing \
+            --cov-report=xml \
+            -v \
+            --tb=short
+        env:
+          ENVIRONMENT: development
+          LLM_PROVIDER: ollama
+
+      - name: Upload coverage report
+        uses: codecov/codecov-action@v4
+        if: always()
+        with:
+          file: ./coverage.xml
+          fail_ci_if_error: false
+
+  # ── Job 3: Docker Build ────────────────────────────────────────────
+  build:
+    name: Docker Build
+    runs-on: ubuntu-latest
+    needs: test
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          dockerfile: Dockerfile
+          push: false          # only build, don't push (no registry needed for CI)
+          tags: prism-rag:ci
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Verify image built
+        run: docker images prism-rag:ci

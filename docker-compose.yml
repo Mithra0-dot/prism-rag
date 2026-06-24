@@ -1,0 +1,67 @@
+# ─────────────────────────────────────────────────────────────────────
+# PRISM — docker-compose.yml
+#
+# Services:
+#   prism-backend : FastAPI RAG engine
+#   ollama        : Local LLM server (llama3.2)
+#
+# Usage:
+#   docker-compose up --build        # first run
+#   docker-compose up                # subsequent runs
+#   docker-compose down              # stop all services
+# ─────────────────────────────────────────────────────────────────────
+
+version: "3.9"
+
+services:
+
+  # ── Ollama — Local LLM Server ─────────────────────────────────────
+  ollama:
+    image: ollama/ollama:latest
+    container_name: prism-ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama    # persist downloaded models
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:11434/api/tags"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # ── PRISM Backend — FastAPI ───────────────────────────────────────
+  prism-backend:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: prism-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data             # persist ChromaDB + uploads
+    environment:
+      - ENVIRONMENT=production
+      - LLM_PROVIDER=ollama
+      - LLM_MODEL_NAME=llama3.2
+      # Point to the ollama service (not localhost)
+      - OLLAMA_BASE_URL=http://ollama:11434
+      - CHROMA_PERSIST_DIR=/app/data/chroma_db
+      - UPLOAD_DIR=/app/data/uploads
+      - MLFLOW_TRACKING_URI=/app/data/mlflow
+    depends_on:
+      ollama:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/api/v1/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+volumes:
+  ollama_data:
+    driver: local
