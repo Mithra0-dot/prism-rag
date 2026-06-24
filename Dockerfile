@@ -41,7 +41,6 @@ ENV PATH=/root/.local/bin:$PATH
 
 # Copy application code
 COPY backend/ ./backend/
-COPY data/ ./data/
 COPY .env.example .env
 
 # Create data directories
