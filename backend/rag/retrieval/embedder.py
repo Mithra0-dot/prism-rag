@@ -36,8 +36,8 @@ from typing import Optional
 from langchain.embeddings.base import Embeddings
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import EmbeddingError
+from backend.core.logger import get_logger
 
 settings = get_settings()
 log = get_logger("embedder")

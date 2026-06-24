@@ -30,12 +30,12 @@ Usage:
 """
 
 from enum import Enum
-from langchain.prompts import PromptTemplate, ChatPromptTemplate
-from langchain.prompts.chat import (
-    SystemMessagePromptTemplate,
-    HumanMessagePromptTemplate,
-)
 
+from langchain.prompts import ChatPromptTemplate, PromptTemplate
+from langchain.prompts.chat import (
+    HumanMessagePromptTemplate,
+    SystemMessagePromptTemplate,
+)
 
 # ══════════════════════════════════════════════════════════════════════
 # Prompt Type Enum

@@ -8,11 +8,11 @@ All environment variables are validated and typed here.
 Every other module imports from this file — never from os.environ directly.
 """
 
-from pathlib import Path
 from functools import lru_cache
+from pathlib import Path
+
 from pydantic import Field, field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
-
 
 # ── Project root (two levels up from this file) ──────────────────────
 BASE_DIR = Path(__file__).resolve().parent.parent.parent

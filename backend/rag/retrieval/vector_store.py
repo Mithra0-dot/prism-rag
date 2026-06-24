@@ -36,15 +36,15 @@ Usage:
 
 import time
 from functools import lru_cache
-from typing import Optional
 from pathlib import Path
+from typing import Optional
 
 from langchain.schema import Document
 from langchain_community.vectorstores import Chroma
 
 from backend.core.config import get_settings
+from backend.core.exceptions import DocumentNotFoundError, VectorStoreError
 from backend.core.logger import get_logger
-from backend.core.exceptions import VectorStoreError, DocumentNotFoundError
 from backend.rag.retrieval.embedder import get_embedder
 
 settings = get_settings()

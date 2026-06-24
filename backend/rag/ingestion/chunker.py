@@ -42,8 +42,8 @@ from langchain.text_splitter import (
 )
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import DocumentIngestionError
+from backend.core.logger import get_logger
 
 settings = get_settings()
 log = get_logger("chunker")

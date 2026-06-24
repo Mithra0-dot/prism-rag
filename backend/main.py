@@ -24,18 +24,18 @@ from fastapi import FastAPI, Request, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from backend.core.config import get_settings
-from backend.core.logger import get_logger, setup_logging
-from backend.core.exceptions import (
-    PRISMBaseException,
-    DocumentNotFoundError,
-    UnsupportedFileTypeError,
-    FileTooLargeError,
-    LLMError,
-    RateLimitError,
-)
 from backend.api.routes.ingest import router as ingest_router
 from backend.api.routes.query import router as query_router
+from backend.core.config import get_settings
+from backend.core.exceptions import (
+    DocumentNotFoundError,
+    FileTooLargeError,
+    LLMError,
+    PRISMBaseException,
+    RateLimitError,
+    UnsupportedFileTypeError,
+)
+from backend.core.logger import get_logger, setup_logging
 
 settings = get_settings()
 log = get_logger("main")

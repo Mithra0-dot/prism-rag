@@ -21,10 +21,11 @@ Usage:
     logger.error("retrieval failed: {err}", err=str(e))
 """
 
-import sys
 import json
 import logging
+import sys
 from pathlib import Path
+
 from loguru import logger
 
 from backend.core.config import get_settings

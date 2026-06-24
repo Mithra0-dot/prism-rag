@@ -37,8 +37,8 @@ from typing import Optional
 from langchain.schema import Document
 
 from backend.core.config import get_settings
+from backend.core.exceptions import DocumentIngestionError, VisionProcessingError
 from backend.core.logger import get_logger
-from backend.core.exceptions import VisionProcessingError, DocumentIngestionError
 
 settings = get_settings()
 log = get_logger("vision")
@@ -109,7 +109,7 @@ class VisionExtractor:
         start = time.perf_counter()
 
         try:
-            import fitz   # PyMuPDF
+            import fitz  # PyMuPDF
         except ImportError:
             raise VisionProcessingError(
                 message="PyMuPDF not installed. Run: pip install pymupdf",

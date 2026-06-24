@@ -47,8 +47,8 @@ from typing import Optional
 from langchain.schema import Document
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import RetrievalError
+from backend.core.logger import get_logger
 from backend.rag.retrieval.vector_store import get_vector_store
 
 settings = get_settings()

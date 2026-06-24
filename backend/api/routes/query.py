@@ -7,24 +7,24 @@ RAG query API endpoints.
 """
 
 import json
-from typing import Optional, AsyncIterator
+from typing import AsyncIterator, Optional
 
 from fastapi import APIRouter, HTTPException, status
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import (
     LLMError,
-    RetrievalError,
     RateLimitError,
+    RetrievalError,
     VectorStoreError,
 )
-from backend.rag.retrieval.hybrid_search import HybridSearchEngine
-from backend.rag.retrieval.vector_store import get_vector_store
+from backend.core.logger import get_logger
 from backend.rag.generation.chain import PRISMChain
 from backend.rag.generation.prompt import PromptType
+from backend.rag.retrieval.hybrid_search import HybridSearchEngine
+from backend.rag.retrieval.vector_store import get_vector_store
 
 settings = get_settings()
 log = get_logger("query_route")

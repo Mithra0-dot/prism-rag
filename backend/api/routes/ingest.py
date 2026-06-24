@@ -20,24 +20,24 @@ The ingestion pipeline per request:
   7. Return success with stats
 """
 
-import uuid
 import shutil
+import uuid
 from pathlib import Path
 from typing import Optional
 
-from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status
+from fastapi import APIRouter, File, Form, HTTPException, UploadFile, status
 from pydantic import BaseModel
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import (
-    UnsupportedFileTypeError,
-    FileTooLargeError,
     DocumentIngestionError,
+    FileTooLargeError,
+    UnsupportedFileTypeError,
     VectorStoreError,
 )
+from backend.core.logger import get_logger
+from backend.rag.ingestion.chunker import ChunkStrategy, DocumentChunker
 from backend.rag.ingestion.loader import DocumentLoader
-from backend.rag.ingestion.chunker import DocumentChunker, ChunkStrategy
 from backend.rag.retrieval.vector_store import get_vector_store
 
 settings = get_settings()

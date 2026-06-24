@@ -8,19 +8,19 @@ Now supports vision=True for OCR extraction from images/charts in PDFs.
 """
 
 import time
-from pathlib import Path
 from datetime import datetime
+from pathlib import Path
 from typing import Optional
 
 from langchain.schema import Document
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import (
-    UnsupportedFileTypeError,
-    FileTooLargeError,
     DocumentIngestionError,
+    FileTooLargeError,
+    UnsupportedFileTypeError,
 )
+from backend.core.logger import get_logger
 
 settings = get_settings()
 log = get_logger("loader")

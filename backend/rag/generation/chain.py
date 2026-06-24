@@ -13,14 +13,14 @@ from langchain.schema import Document
 from langchain_community.chat_models import ChatOllama
 
 from backend.core.config import get_settings
-from backend.core.logger import get_logger
 from backend.core.exceptions import LLMError, RetrievalError
-from backend.rag.retrieval.hybrid_search import HybridSearchEngine
+from backend.core.logger import get_logger
 from backend.rag.generation.prompt import (
-    get_rag_prompt,
-    format_context,
     PromptType,
+    format_context,
+    get_rag_prompt,
 )
+from backend.rag.retrieval.hybrid_search import HybridSearchEngine
 
 settings = get_settings()
 log = get_logger("chain")
