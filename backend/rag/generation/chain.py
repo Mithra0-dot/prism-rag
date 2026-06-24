@@ -14,7 +14,7 @@ from langchain_community.chat_models import ChatOllama
 
 from backend.core.config import get_settings
 from backend.core.logger import get_logger
-from backend.core.exceptions import LLMError, RateLimitError, RetrievalError
+from backend.core.exceptions import LLMError, RetrievalError
 from backend.rag.retrieval.hybrid_search import HybridSearchEngine
 from backend.rag.generation.prompt import (
     get_rag_prompt,

@@ -28,21 +28,14 @@ from backend.core.config import get_settings
 from backend.core.logger import get_logger, setup_logging
 from backend.core.exceptions import (
     PRISMBaseException,
-    ConfigurationError,
-    DocumentIngestionError,
     DocumentNotFoundError,
     UnsupportedFileTypeError,
     FileTooLargeError,
-    RetrievalError,
-    EmbeddingError,
-    VectorStoreError,
     LLMError,
-    ContextWindowExceededError,
-    VisionProcessingError,
-    EvaluationError,
-    InvalidRequestError,
     RateLimitError,
 )
+from backend.api.routes.ingest import router as ingest_router
+from backend.api.routes.query import router as query_router
 
 settings = get_settings()
 log = get_logger("main")
@@ -251,8 +244,7 @@ async def health_check() -> dict:
 # ══════════════════════════════════════════════════════════════════════
 # API Routers
 # ══════════════════════════════════════════════════════════════════════
-from backend.api.routes.ingest import router as ingest_router
-from backend.api.routes.query import router as query_router
+
 
 app.include_router(ingest_router, prefix=settings.api_prefix)
 app.include_router(query_router, prefix=settings.api_prefix)

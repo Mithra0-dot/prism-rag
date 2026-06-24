@@ -26,7 +26,6 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import APIRouter, UploadFile, File, Form, HTTPException, status
-from fastapi.responses import JSONResponse
 from pydantic import BaseModel
 
 from backend.core.config import get_settings

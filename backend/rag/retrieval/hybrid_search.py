@@ -42,7 +42,6 @@ Usage:
     results = engine.search("What was the Q3 revenue?", k=5)
 """
 
-import math
 from typing import Optional
 
 from langchain.schema import Document

@@ -257,7 +257,6 @@ class VisionExtractor:
         """
         try:
             import cv2
-            import numpy as np
 
             gray = cv2.cvtColor(image, cv2.COLOR_BGR2GRAY)
 
@@ -302,7 +301,6 @@ class VisionExtractor:
             Extracted text string, or empty string if nothing found
         """
         try:
-            import cv2
 
             x, y, w, h = region
             # Add padding around the region for better OCR accuracy

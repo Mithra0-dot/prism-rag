@@ -236,8 +236,6 @@ class DocumentChunker:
         twice (once for chunking, once for indexing). Use when quality
         matters more than ingestion speed.
         """
-        import re
-        import numpy as np
 
         try:
             from sentence_transformers import SentenceTransformer
