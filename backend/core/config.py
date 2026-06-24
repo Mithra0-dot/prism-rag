@@ -193,7 +193,7 @@ class Settings(BaseSettings):
     @field_validator("llm_provider")
     @classmethod
     def validate_llm_provider(cls, v: str) -> str:
-        allowed = {"openai", "huggingface"}
+        allowed = {"openai", "huggingface", "ollama"}
         if v.lower() not in allowed:
             raise ValueError(f"llm_provider must be one of {allowed}, got '{v}'")
         return v.lower()
